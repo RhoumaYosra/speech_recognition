@@ -34,6 +34,8 @@
 # except Exception as e:
 #     print(f"Erreur lors de la reconnaissance avec Vosk : {e}")
 
+
+
 import time
 import speech_recognition as sr
 import vosk
@@ -54,15 +56,16 @@ audio_file = "./converted_audio.wav"  # Replace with your WAV file path
 
 with sr.AudioFile(audio_file) as source:
     print(f"Transcription de {audio_file}...")
-    start_time = time.time()  # Start measuring time
     audio_data = r.record(source)  # Record the entire audio file
-    end_time = time.time()  # Stop measuring time
 
 try:
     # Recognize speech using Vosk
     if audio_data:
         audio_data = audio_data.get_raw_data(convert_rate=16000, convert_width=2)
+        start_time = time.time()  # Start measuring time for recognition
         recognizer.AcceptWaveform(audio_data)
+        end_time = time.time()  # Stop measuring time for recognition
+
         result = json.loads(recognizer.Result())
         text = result.get("text", "")
         print("Vosk API pense que vous avez dit : " + text)
@@ -71,4 +74,3 @@ try:
         print("Aucun audio enregistré.")
 except Exception as e:
     print(f"Erreur lors de la reconnaissance avec Vosk : {e}")
-
